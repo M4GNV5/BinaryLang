@@ -16,7 +16,7 @@ var BinaryLang = new function()
 	}
 	this.input = function()
 	{
-		throw "read not implemented!";
+		throw "read not implemented";
 	}
 	this.output = function(value)
 	{
@@ -194,9 +194,28 @@ var BinaryLang = new function()
 		callFunc.call(this, func);
 	}
 
-	this.argumentsCount[15] = 1;
-	this.commands[15] = function(newSize) //set argument size
+	this.argumentsCount[15] = 3;
+	this.commands[15] = function(fn, arg0, arg1) //ext2
 	{
-		this.argumentSize = newSize;
+		switch(fn)
+		{
+		case 0: // set bit depth to arg0
+			this.argumentSize = arg0;
+			break;
+		case 1: // copy pointer
+			this.fields[arg0] = this.fields[this.fields[arg1]];
+			break;
+		case 2: // modulo
+			this.fields[arg0] %= this.fields[arg1];
+			break;
+		case 3: // bitshift left
+			this.fields[arg0] <<= this.fields[arg1];
+			break;
+		case 4: // bitshift right
+			this.fields[arg0] >>= this.fields[arg1];
+			break;
+		default:
+			throw "Extension not implemented: " + fn;
+		}
 	}
 };
