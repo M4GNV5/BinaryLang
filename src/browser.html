@@ -15,7 +15,7 @@
 			<br />
 			<br />
 
-			<textarea id="output" style="width: 700px; height: 300px;"></textarea>
+			<textarea id="output" style="width: 700px; height: 300px;" readonly></textarea>
 			<br />
 
 			<script type="text/javascript">
@@ -23,7 +23,12 @@
 				function execScript()
 				{
 					var outputBox = document.getElementById("output");
+					outputBox.value = "";
 
+					BinaryLang.input = function(text)
+					{
+						return prompt("script requires input");
+					}
 					BinaryLang.output = function(text)
 					{
 						outputBox.value += text;
