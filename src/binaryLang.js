@@ -16,7 +16,7 @@ var BinaryLang = new function()
 	}
 	this.input = function()
 	{
-		return prompt();
+		throw "read not implemented";
 	}
 	this.output = function(value)
 	{
