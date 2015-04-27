@@ -25,6 +25,17 @@ jump if a != b | 11 | 1011 | a, b, func
 jump if a < b | 12 | 1100 | a, b, func
 jump if a > b | 13 | 1101 | a, b, func
 jump | 14 | 1110 | func
-set argument length | 15 | 1111 | newLength
+multifunction | 15 | 1111 | selector, arg1, arg2
+
+Multifunction:
+`1111 00000000 <new size> 00000000` sets argument length to `new size`
+
+`1111 00000001 <a> <b>` sets fields[a] to fields[fields[b]]
+
+`1111 00000010 <a> <b>` a %= b
+
+`1111 00000011 <a> <b>` a <<= b
+
+`1111 00000100 <a> <b>` a >>= b
 
 
