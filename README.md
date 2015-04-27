@@ -28,6 +28,7 @@ jump | 14 | 1110 | func
 multifunction | 15 | 1111 | selector, arg1, arg2
 
 Multifunction:
+
 `1111 00000000 <new size> 00000000` sets argument length to `new size`
 
 `1111 00000001 <a> <b>` sets fields[a] to fields[fields[b]]
