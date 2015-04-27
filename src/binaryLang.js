@@ -194,8 +194,8 @@ var BinaryLang = new function()
 		callFunc.call(this, func);
 	}
 
-	this.argumentsCount[15] = 5;
-	this.commands[15] = function(fn, arg0, arg1, arg2, arg3) //extension
+	this.argumentsCount[15] = 3;
+	this.commands[15] = function(fn, arg0, arg1) //ext2
 	{
 		switch(fn)
 		{
