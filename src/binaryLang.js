@@ -14,6 +14,10 @@ var BinaryLang = new function()
 	{
 		throw message;
 	}
+	this.input = function()
+	{
+		throw "read not implemented!";
+	}
 	this.output = function(value)
 	{
 		console.log(value);
@@ -61,7 +65,7 @@ var BinaryLang = new function()
 				pos += this.argumentSize;
 			}
 			
-			if(currentFunction > 0)
+			if(currentFunction > -1 && decimalCmd != 9) //if decimalCmd is end function actually call it
 			{
 				this.functions[currentFunction].push({cmd: decimalCmd, args: args});
 			}
@@ -75,9 +79,9 @@ var BinaryLang = new function()
 
 
 	this.argumentsCount[0] = 2;
-	this.commands[0] = function(adress, value) //set adress value
+	this.commands[0] = function(address, value) //set address value
 	{
-		this.fields[adress] = value;
+		this.fields[address] = value;
 	}
 
 	this.argumentsCount[1] = 2;
@@ -87,47 +91,54 @@ var BinaryLang = new function()
 	}
 
 	this.argumentsCount[2] = 1;
-	this.commands[2] = function(adress) //out adress
+	this.commands[2] = function(address) //out address
 	{
-		this.output(String.fromCharCode(this.fields[adress]));
+		this.output(String.fromCharCode(this.fields[address]));
 	}
 
 	this.argumentsCount[3] = 2;
-	this.commands[3] = function(adress, other) //adress += other
+	this.commands[3] = function(address, length) //read to address with length
 	{
-		this.fields[adress] += this.fields[other];
+		var input = this.input();
+		for(var i = 0; i < length; i++)
+		{
+			if(i < input.length)
+				this.fields[address + i] = input.charCodeAt(i);
+			else
+				this.fields[address + i] = 0;
+		}
 	}
 
 	this.argumentsCount[4] = 2;
-	this.commands[4] = function(adress, other) //adress -= other
+	this.commands[4] = function(address, other) //address += other
 	{
-		this.fields[adress] -= this.fields[other];
+		this.fields[address] += this.fields[other];
 	}
 
 	this.argumentsCount[5] = 2;
-	this.commands[5] = function(adress, other) //adress *= other
+	this.commands[5] = function(address, other) //address -= other
 	{
-		this.fields[adress] *= this.fields[other];
+		this.fields[address] -= this.fields[other];
 	}
 
 	this.argumentsCount[6] = 2;
-	this.commands[6] = function(adress, other) //adress /= other
+	this.commands[6] = function(address, other) //address *= other
 	{
-		this.fields[adress] /= this.fields[other];
+		this.fields[address] *= this.fields[other];
 	}
 
 	this.argumentsCount[7] = 2;
-	this.commands[7] = function(adress, other) //adress %= other
+	this.commands[7] = function(address, other) //address /= other
 	{
-		this.fields[adress] %= this.fields[other];
+		this.fields[address] /= this.fields[other];
 	}
 
 
 	this.argumentsCount[8] = 1;
-	this.commands[8] = function(adress) //start function
+	this.commands[8] = function(address) //start function
 	{
-		this.functions[adress] = [];
-		currentFunction = adress;
+		this.functions[address] = [];
+		currentFunction = address;
 	}
 
 	this.argumentsCount[9] = 0;
@@ -145,42 +156,42 @@ var BinaryLang = new function()
 
 		for(var i = 0; i < func.length; i++)
 		{
-			this.command[func[i].cmd].apply(this, func[i].args)
+			this.commands[func[i].cmd].apply(this, func[i].args);
 		}
 	}
 
 	this.argumentsCount[10] = 3;
-	this.commands[10] = function(adress, other, func) //if adress == other jump to func
+	this.commands[10] = function(address, other, func) //if address == other jump to func
 	{
-		if(this.fields[adress] == this.fields[other])
-			callFunc(func);
+		if(this.fields[address] == this.fields[other])
+			callFunc.call(this, func);
 	}
 
 	this.argumentsCount[11] = 3;
-	this.commands[11] = function(adress, other, func) //if adress != other jump to func
+	this.commands[11] = function(address, other, func) //if address != other jump to func
 	{
-		if(this.fields[adress] != this.fields[other])
-			callFunc(func);
+		if(this.fields[address] != this.fields[other])
+			callFunc.call(this, func);
 	}
 
 	this.argumentsCount[12] = 3;
-	this.commands[12] = function(adress, other, func) //if adress < other jump to func
+	this.commands[12] = function(address, other, func) //if address < other jump to func
 	{
-		if(this.fields[adress] < this.fields[other])
-			callFunc(func);
+		if(this.fields[address] < this.fields[other])
+			callFunc.call(this, func);
 	}
 
 	this.argumentsCount[13] = 3;
-	this.commands[13] = function(adress, other, func) //if adress > other jump to func
+	this.commands[13] = function(address, other, func) //if address > other jump to func
 	{
-		if(this.fields[adress] > this.fields[other])
-			callFunc(func);
+		if(this.fields[address] > this.fields[other])
+			callFunc.call(this, func);
 	}
 
 	this.argumentsCount[14] = 1;
 	this.commands[14] = function(func) //jump to func
 	{
-		callFunc(func);
+		callFunc.call(this, func);
 	}
 
 	this.argumentsCount[15] = 1;
