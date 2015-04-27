@@ -19,10 +19,24 @@ var BinaryLang = new function()
 		console.log(value);
 	}
 
+	this.reset = function()
+	{
+		this.fields = [];
+		this.functions = [];
+
+		this.commandSize = 4;
+		this.argumentSize = 8;
+	}
+
 	var pos = 0;
 	var currentFunction = -1;
-	this.execute = function(source)
+	this.execute = function(source, reset)
 	{
+		pos = 0;
+
+		if(reset !== false)
+			this.reset();
+
 		source = source.replace(/[^01]/g, "");
 		while(pos < source.length)
 		{
@@ -46,7 +60,7 @@ var BinaryLang = new function()
 				args.push(decimalArg);
 				pos += this.argumentSize;
 			}
-
+			
 			if(currentFunction > 0)
 			{
 				this.functions[currentFunction].push({cmd: decimalCmd, args: args});
