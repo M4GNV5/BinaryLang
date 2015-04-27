@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+	<head>
+		<title>BinaryLang Browser</title>
+	</head>
+
+	<body>
+		<!-- yes this is ugly but idc -->
+
+		<center>
+			<textarea id="input" style="width: 700px; height: 300px;"></textarea>
+
+			<br />
+			<button onclick="execScript();">Run</button>
+			<br />
+			<br />
+
+			<textarea id="output" style="width: 700px; height: 300px;"></textarea>
+			<br />
+
+			<script type="text/javascript">
+
+				function execScript()
+				{
+					var outputBox = document.getElementById("output");
+
+					BinaryLang.output = function(text)
+					{
+						outputBox.value += text;
+					}
+					BinaryLang.error = function(text)
+					{
+						alert(text);
+						throw text;
+					}
+
+					var code = document.getElementById("input").value;
+					BinaryLang.execute(code);
+				}
+
+			</script>
+
+			<script type="text/javascript" src="binaryLang.js"></script>
+		</center>
+	</body>
+</html>
