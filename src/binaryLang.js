@@ -273,3 +273,6 @@ var BinaryLang = new function()
 		this.argumentSize = newSize;
 	}
 };
+
+if(module.exports)
+	module.exports = BinaryLang;
