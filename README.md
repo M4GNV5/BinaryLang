@@ -25,18 +25,22 @@ jump if a != b | 11 | 1011 | a, b, func
 jump if a < b | 12 | 1100 | a, b, func
 jump if a > b | 13 | 1101 | a, b, func
 jump | 14 | 1110 | func
-multifunction | 15 | 1111 | selector, arg1, arg2
+extension functions | 15 | 1111 | selector, arg0, arg1
 
-Multifunction:
+##Extension functions
 
-`1111 00000000 <new size> 00000000` sets argument length to `new size`
-
-`1111 00000001 <a> <b>` sets fields[a] to fields[fields[b]]
-
-`1111 00000010 <a> <b>` a %= b
-
-`1111 00000011 <a> <b>` a <<= b
-
-`1111 00000100 <a> <b>` a >>= b
+Name | Decimal | Binary | Arguments
+--- | --- | --- | ---
+fields[fields[a]] = b | 0 | 0000 | a, b
+fields[a] = fields[fields[b]] | 1 | 0001 | a, b
+out int | 2 | 0010 | address
+read int | 3 | 0011 | address
+a %= b | 4 | 0100 | a, b
+a <<= b | 5 | 0101 | a, b
+a >>= b | 6 | 0110 | a, b
+a *= -1 | 7 | 0111 | a
+a = \|a\| | 8 | 1000 | a
+a = random from 0 to b | 9 | 1001 | a, b
+set bit depth | 10 | 1010 | newLength
 
 
