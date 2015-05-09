@@ -27,7 +27,7 @@ jump if a > b | 13 | 1101 | a, b, func
 jump | 14 | 1110 | func
 extension functions | 15 | 1111 | selector, arg0, arg1
 
-##Extension functions
+##Extension commands
 
 Name | Decimal | Binary | Arguments
 --- | --- | --- | ---
