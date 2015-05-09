@@ -6,6 +6,7 @@ var BinaryLang = new function()
 
 	//api
 	this.commands = [];
+	this.extensionCommands = [];
 	this.argumentsCount = [];
 	this.commandSize = 4;
 	this.argumentSize = 8;
@@ -100,6 +101,10 @@ var BinaryLang = new function()
 	this.commands[3] = function(address, length) //read to address with length
 	{
 		var input = this.input();
+
+		if(length == 0)
+			length = input.length;
+
 		for(var i = 0; i < length; i++)
 		{
 			if(i < input.length)
@@ -130,7 +135,7 @@ var BinaryLang = new function()
 	this.argumentsCount[7] = 2;
 	this.commands[7] = function(address, other) //address /= other
 	{
-		this.fields[address] /= this.fields[other];
+		this.fields[address] = Math.floor(this.fields[address] / this.fields[other]);
 	}
 
 
@@ -194,28 +199,77 @@ var BinaryLang = new function()
 		callFunc.call(this, func);
 	}
 
+
+
 	this.argumentsCount[15] = 3;
-	this.commands[15] = function(fn, arg0, arg1) //ext2
+	this.commands[15] = function(id, arg0, arg1) //extension functions
 	{
-		switch(fn)
-		{
-		case 0: // set bit depth to arg0
-			this.argumentSize = arg0;
-			break;
-		case 1: // copy pointer
-			this.fields[arg0] = this.fields[this.fields[arg1]];
-			break;
-		case 2: // modulo
-			this.fields[arg0] %= this.fields[arg1];
-			break;
-		case 3: // bitshift left
-			this.fields[arg0] <<= this.fields[arg1];
-			break;
-		case 4: // bitshift right
-			this.fields[arg0] >>= this.fields[arg1];
-			break;
-		default:
-			throw "Extension not implemented: " + fn;
-		}
+		if(typeof this.extensionCommands[id] == 'undefined')
+			this.error('Unknown extension ' + id);
+
+		this.extensionCommands[id].call(this, arg0, arg1);
+	}
+	this.addExtension = function(id, func)
+	{
+		this.extensionCommands[id] = func;
+	}
+
+	this.extensionCommands[0] = function(adress, value) // set value at adress
+	{
+		this.fields[this.fields[address]] = value;
+	}
+
+	this.extensionCommands[1] = function(address, other) // copy pointer
+	{
+		this.fields[address] = this.fields[this.fields[other]];
+	}
+
+	this.extensionCommands[2] = function(address) //out integer
+	{
+		this.output(this.fields[address]);
+	}
+
+	this.extensionCommands[3] = function(adress) //read integer
+	{
+		this.fields[adress] = parseInt(this.input());
+	}
+
+
+
+	this.extensionCommands[4] = function(address, other) //modulo
+	{
+		this.fields[address] %= this.fields[other];
+	}
+
+	this.extensionCommands[5] = function(address, other) // bitshift left
+	{
+		this.fields[address] <<= this.fields[other];
+	}
+
+	this.extensionCommands[6] = function(address, other) // bitshift right
+	{
+		this.fields[address] >>= this.fields[other];
+	}
+
+	this.extensionCommands[7] = function(address) // address *= -1
+	{
+		this.fields[address] *= -1;
+	}
+
+	this.extensionCommands[8] = function(address) // adress = |adress|
+	{
+		this.fields[address] = Math.abs(this.fields[adress]);
+	}
+
+	this.extensionCommands[9] = function(adress, max) // adress = random between 0 and max
+	{
+		this.fields[address] = Math.floor(Math.random() * max);
+	}
+
+
+
+	this.extensionCommands[10] = function(newSize) // set bit depth
+	{
+		this.argumentSize = newSize;
 	}
 };
