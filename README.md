@@ -1,6 +1,7 @@
 # BinaryLang
 Cool people can write programs only with 0 and 1
-YOu want to be cool? Do it [here](http://m4gnv5.github.io/BinaryLang/src/browser.html)
+
+You want to be cool? Be it [here](http://m4gnv5.github.io/BinaryLang/src/browser.html)
 
 #How do i write code to be cool?
 Every command has following layout `<4 bits command id> <arg1> <arg2> ...`
